@@ -22,13 +22,13 @@ let btnAdd = document.getElementById('btn-add');
 // console.log(inpAdd, btnAdd)
 
 //навеили событие на кнопку "Сохранить"
-btnAdd.addEventListener('click',async () => {
+btnAdd.addEventListener('click', async () => {
     // собираем объект для добавления в дб.жсон
     let newTodo = {
         todo: inpAdd.value,
     };
     // проверка на заполненность инпута и останавливаем код с помощью return, чтобы пост-запрос не выполнился
-    if (newTodo.todo.trim() === ""){
+    if (newTodo.todo.trim() === "") {
         alert('Заполните поле!');
         return;
     }
@@ -36,7 +36,7 @@ btnAdd.addEventListener('click',async () => {
     await fetch(API, {
         method: "POST", // указываем метод
         body: JSON.stringify(newTodo), // указываем что именно нужно запостить
-        headers: {
+            headers: {
             "Content-type": "application/json; charset = utf-8"
         },// кодировка
     });
@@ -47,13 +47,13 @@ btnAdd.addEventListener('click',async () => {
 });
 
 // Read
-// получаем элемент, чтобы в нем отобразить все таски
+// получаем элемент, чтобы в нем отобразить все таски`
 let list = document.getElementById('list')
 //функция для получения всех тасков и отображения их в div#list
 // async await нужен здесь, чтобы при отправке запроса мы сначала получили данные и только потом записали все в переменную response,
 // иначе (если мы НЕ дождемся) туда запишется pending (состояние промиса, который еще не выполнен)
 async function getTodos() {
-    let response = await fetch(API)// если не указать мтеод запроса, то по умолчанию это GET запрос
+    let response = await fetch(API)// если не указать метод запроса, то по умолчанию это GET запрос
         .then((res) => res.json()) // переводим все в json формат
         .catch(err => console.log(err)); // отловили ошибку
     console.log(response);
@@ -63,10 +63,19 @@ async function getTodos() {
     // каждый  созданный элемент аппендим в div#list
     response.forEach((item) => {
         let newElem = document.createElement("div");
-        newElem.innerHTML = `<span>${item.todo}</span>`
+        newElem.id = item.id;
+        newElem.innerHTML = `<span>${item.todo}</span><button class="btn-delete">Delete</button>`
         list.append(newElem)
     })
     // console.log(list)
 }
+
 // вывзываем функцию, чтобы как только откроется страница что-то было отображено
 getTodos()
+document.addEventListener('click',async(e)=>{
+    let id = e.target.parentNode.id;
+    await fetch(`${API}/${id}`,{
+        method: "DELETE",
+    });
+    getTodos();
+})

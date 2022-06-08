@@ -1,20 +1,3 @@
 {
-  "todos": [
-    {
-      "todo": "kush",
-      "id": 1
-    },
-    {
-      "todo": "loh",
-      "id": 2
-    },
-    {
-      "todo": "bezdar",
-      "id": 3
-    },
-    {
-      "todo": "hudshii",
-      "id": 4
-    }
-  ]
+  "todos": []
 }
